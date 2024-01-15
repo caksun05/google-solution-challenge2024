@@ -12,10 +12,12 @@ bcrypt = Bcrypt(app)
 from backend.routes.auth import auth_bp
 from backend.routes.user import user_bp
 from backend.routes.admin import admin_bp
+from backend.routes.chatbot import chatbot_bp
 
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
 
 if __name__ == '__main__':
     with app.app_context():
