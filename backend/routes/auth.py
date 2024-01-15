@@ -1,7 +1,7 @@
 # backend/routes/auth.py
 from flask import Blueprint, request, jsonify
-from backend import app, bcrypt
-from backend.models import User, db
+from app import bcrypt, db
+from backend.models import User
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -14,4 +14,15 @@ def register():
     db.session.commit()
     return jsonify({'message': 'User registered successfully!'})
 
-# Implement endpoint /login and /logout as needed
+@auth_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = User.query.filter_by(username=data['username']).first()
+    if user and bcrypt.check_password_hash(user.password, data['password']):
+        return jsonify({'message': 'User logged in successfully!'})
+    else:
+        return jsonify({'message': 'Invalid username or password!'})
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    return jsonify({'message': 'User logged out successfully!'})
