@@ -13,7 +13,7 @@ const FormUpload = () => {
                     Form Upload File
                 </h3>
                 </div>
-                <form id="form-upload" action="#" method="#">
+                <form id="form-upload" action="http://127.0.0.1:5000/api/upload/pdf" method="post" encType="multipart/form-data">
                     <div className="p-6.5">
                         <div className="mb-4.5 flex flex-col gap-6">
                             <div className="w-full">
@@ -22,8 +22,8 @@ const FormUpload = () => {
                                 </label>
                                 <input
                                 type="text"
-                                id="name"
-                                name="name"
+                                id="filename"
+                                name="filename"
                                 placeholder="Masukkan nama file"
                                 defaultValue="Masukkan nama file"
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -53,6 +53,7 @@ const FormUpload = () => {
                                 type="file"
                                 id="file"
                                 name="file"
+                                accept=".pdf"
                                 className="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-medium focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                             required/>
                         </div>

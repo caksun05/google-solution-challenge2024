@@ -1,23 +1,29 @@
-# Base image
-FROM python:3.10-slim
+# Stage 1: Build frontend
+FROM node:14 as frontend
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend .
+RUN npm run dev
 
-# Set working directory
+# Stage 2: Build backend
+FROM python:3.8-slim as backend
+WORKDIR /app/backend
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY backend .
+
+# Stage 3: Final image with both frontend and backend
+FROM python:3.8-slim
 WORKDIR /app
+COPY --from=frontend /app/frontend/build /app/frontend/build
+COPY --from=backend /app/backend /app/backend
 
-# Copy requirements.txt
-COPY requirements.txt requirements.txt
+# Install gunicorn for running the Flask app
+RUN pip install gunicorn
 
-# Install dependencies
-RUN pip install -r requirements.txt
-
-# Copy app code
-COPY . .
-
-# Expose port for Flask app
+# Expose port
 EXPOSE 5000
 
-# Set environment variable for OpenAI API key
-ENV OPENAI_API_KEY=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
-
-# Run the Flask app
-CMD ["python", "app.py"]
+# Start the application
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
