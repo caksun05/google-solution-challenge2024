@@ -1,3 +1,4 @@
+# backend/routes/chatbot.py
 import os
 import urllib
 import warnings
@@ -51,12 +52,12 @@ stuff_chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
 chatbot_bp = Blueprint('chatbot', __name__)
 
 @chatbot_bp.route('/', methods=['GET'])
-def index():
+def render_chatbot():
     return render_template('chatbot.html')
 
 @chatbot_bp.route('/', methods=['POST'])
-def index():
-    question = request.args.get('question')
+def answer_question():
+    question = request.form.get('question')
     if question is None:
         return "Please provide a 'question' parameter in the request.", 400
 
@@ -64,6 +65,6 @@ def index():
         docs = vector_index.get_relevant_documents(question)
         stuff_answer = stuff_chain({"input_documents": docs, "question": question}, return_only_outputs=True)
         pprint(stuff_answer)
-        return stuff_answer, 200  # Assuming a JSON-like response
+        return jsonify(stuff_answer), 200  # Convert to JSON using jsonify
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
