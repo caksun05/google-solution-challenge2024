@@ -5,7 +5,6 @@ import warnings
 from pathlib import Path as p
 from pprint import pprint
 from dotenv import load_dotenv
-from flask import Blueprint, request, jsonify, render_template
 
 import pandas as pd
 from langchain import PromptTemplate
@@ -23,8 +22,8 @@ model = ChatOpenAI(
 )
 
 documents = []
-for file in os.listdir('uploads/pdf'):
-    pdf_path = 'uploads/pdf/' + file
+for file in os.listdir('data'):
+    pdf_path = './data/' + file
     loader = PyPDFLoader(pdf_path)
     documents.extend(loader.load_and_split())
 
@@ -49,8 +48,9 @@ prompt = PromptTemplate(
 
 stuff_chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
 
-chatbot_bp = Blueprint('chatbot', __name__)
+from flask import Flask, request
 
+<<<<<<< HEAD:backend/routes/chatbot.py
 @chatbot_bp.route('/', methods=['GET'])
 def render_chatbot():
     return render_template('chatbot.html')
@@ -58,6 +58,13 @@ def render_chatbot():
 @chatbot_bp.route('/', methods=['POST'])
 def answer_question():
     question = request.form.get('question')
+=======
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    question = request.args.get('question')
+>>>>>>> 5e5abca1a6831bb38a9681c24a8ad4fe94f35a9f:chatbot.py
     if question is None:
         return "Please provide a 'question' parameter in the request.", 400
 
@@ -68,3 +75,7 @@ def answer_question():
         return jsonify(stuff_answer), 200  # Convert to JSON using jsonify
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
+
+
+# if __name__ == '__main__':
+# 	app.run(host="0.0.0.0")

@@ -1,6 +1,15 @@
+import { NavLink } from 'react-router-dom';
+
 const TableManagement = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <div className="flex flex-auto mb-4">
+        <h3 className="text-2xl font-bold text-black dark:text-white mr-auto">Tabel Data File</h3>
+        <NavLink to="/data-management/form-upload"
+          className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out bg-green hover:bg-greendark dark:hover:bg-greendark`}>
+          + Tambah
+        </NavLink>
+      </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
@@ -12,7 +21,7 @@ const TableManagement = () => {
                 Tanggal upload
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                Status
+                Ukuran File
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 Aksi
@@ -366,5 +375,4 @@ const TableManagement = () => {
     </div>
   );
 };
-
 export default TableManagement;
