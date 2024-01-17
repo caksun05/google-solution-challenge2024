@@ -26,7 +26,7 @@ def initialize_chatbot():
     )
 
     documents = []
-    pdfs_path = os.path.join(current_app.root_path, 'uploads/pdf')
+    pdfs_path = os.path.join(current_app.root_path, 'files')
     
     for file in os.listdir(pdfs_path):
         pdf_path = os.path.join(pdfs_path, file)

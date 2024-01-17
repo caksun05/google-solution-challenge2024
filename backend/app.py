@@ -55,7 +55,7 @@ def chatbot():
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
     
 # File Uploads API
-app.config['UPLOADED_PDFS_DEST'] = '..uploads/pdf'
+app.config['UPLOADED_PDFS_DEST'] = 'files'
 pdfs = UploadSet('pdfs', ('pdf',))
 configure_uploads(app, pdfs)
 
