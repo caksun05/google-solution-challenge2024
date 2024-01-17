@@ -1,17 +1,18 @@
 import { NavLink } from 'react-router-dom';
+import TableData from '../components/TableData';
 
 const TableManagement = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-auto mb-4">
         <h3 className="text-2xl font-bold text-black dark:text-white mr-auto">Tabel Data File</h3>
-        <NavLink to="/data-management/form-upload"
+        <NavLink to="/data-management/create"
           className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out bg-green hover:bg-greendark dark:hover:bg-greendark`}>
           + Tambah
         </NavLink>
       </div>
       <div className="max-w-full overflow-x-auto">
-        <table className="w-full table-auto">
+        {/* <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
@@ -34,14 +35,13 @@ const TableManagement = () => {
                 <h5 className="font-medium text-black dark:text-white">
                   Dokumen 1
                 </h5>
-                <p className="text-sm">Deskripsi</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                 <p className="text-black dark:text-white">Jan 13,2023</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                  Disetujui
+                <p className="inline-flex bg-opacity-10 py-1 px-3 text-sm font-medium">
+                  1.2 Mb
                 </p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -119,14 +119,13 @@ const TableManagement = () => {
                 <h5 className="font-medium text-black dark:text-white">
                   Dokumen 2
                 </h5>
-                <p className="text-sm">Deskripsi</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                 <p className="text-black dark:text-white">Jan 13,2023</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                  Disetujui
+                <p className="inline-flex bg-opacity-10 py-1 px-3 text-sm font-medium">
+                  1.2 Mb
                 </p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -204,14 +203,13 @@ const TableManagement = () => {
                 <h5 className="font-medium text-black dark:text-white">
                   Dokumen 3
                 </h5>
-                <p className="text-sm">Deskripsi</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                 <p className="text-black dark:text-white">Jan 13,2023</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                <p className="inline-flex rounded-full bg-danger bg-opacity-10 py-1 px-3 text-sm font-medium text-danger">
-                  Ditolak
+                <p className="inline-flex bg-opacity-10 py-1 px-3 text-sm font-medium">
+                  1.2 Mb
                 </p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -289,14 +287,13 @@ const TableManagement = () => {
                 <h5 className="font-medium text-black dark:text-white">
                   Dokumen 4
                 </h5>
-                <p className="text-sm">Deskripsi</p>
               </td>
               <td className="py-5 px-4">
                 <p className="text-black dark:text-white">Jan 13,2023</p>
               </td>
               <td className="py-5 px-4">
-                <p className="inline-flex rounded-full bg-warning bg-opacity-10 py-1 px-3 text-sm font-medium text-warning">
-                  Menunggu
+                <p className="inline-flex bg-opacity-10 py-1 px-3 text-sm font-medium">
+                  1.2 Mb
                 </p>
               </td>
               <td className="py-5 px-4">
@@ -370,7 +367,8 @@ const TableManagement = () => {
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> */}
+        <TableData /> 
       </div>
     </div>
   );

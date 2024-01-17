@@ -13,29 +13,19 @@ const coreRoutes = [
     component: Profile,
   },
   {
-    path: '/forms/form-elements',
-    title: 'Forms Elements',
-    component: FormElements,
-  },
-  {
-    path: '/forms/form-layout',
-    title: 'Form Layouts',
-    component: FormLayout,
-  },
-  {
     path: '/data-management',
     title: 'Data Management',
     component: DataManagement,
   },
   {
+    path: '/data-management/create',
+    title: 'Form Upload',
+    component: FormUpload,
+  },
+  {
     path: '/settings',
     title: 'Settings',
     component: Settings,
-  },
-  {
-    path: '/data-management/form-upload',
-    title: 'Form Upload',
-    component: FormUpload,
   },
 ];
 

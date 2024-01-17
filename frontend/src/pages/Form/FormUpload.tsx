@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 const FormUpload = () => {
     return (
         <>
-            <Breadcrumb pageName="Data Management / Upload File" />
+            <Breadcrumb pageName="Manajemen Data" />
 
         <div className="flex justify-center items-center h-full">
             <div className="w-1/2 justify-self-center justify-center justify-items-center content-center items-center self-center rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -17,7 +17,7 @@ const FormUpload = () => {
                     <div className="p-6.5">
                         <div className="mb-4.5 flex flex-col gap-6">
                             <div className="w-full">
-                                <label className="mb-2.5 block text-black dark:text-white">
+                                <label className="mb-2.5 block text-black dark:text-white" htmlFor="name">
                                 Nama
                                 </label>
                                 <input
@@ -25,13 +25,14 @@ const FormUpload = () => {
                                 id="name"
                                 name="name"
                                 placeholder="Masukkan nama file"
+                                defaultValue="Masukkan nama file"
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                             required/>
                             </div>
                         </div>
 
                         <div className="mb-6">
-                        <label className="mb-2.5 block text-black dark:text-white">
+                        <label className="mb-2.5 block text-black dark:text-white" htmlFor="description">
                             Deskripsi
                         </label>
                             <textarea
@@ -39,12 +40,13 @@ const FormUpload = () => {
                                 id="description"
                                 name="description"
                                 placeholder="Deskripsi file"
+                                defaultValue="Deskripsi file"
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                             required></textarea>
                         </div>
 
                         <div className="mb-6">
-                            <label className="mb-3 block text-black dark:text-white">
+                            <label className="mb-3 block text-black dark:text-white" htmlFor="file">
                             Tambah File
                             </label>
                             <input
