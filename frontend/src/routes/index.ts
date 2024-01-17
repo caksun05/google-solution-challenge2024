@@ -2,9 +2,10 @@ import { lazy } from 'react';
 
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
 const FormLayout = lazy(() => import('../pages/Form/FormLayout'));
+const FormUpload = lazy(() => import('../pages/Form/FormUpload'));
 const Profile = lazy(() => import('../pages/Profile'));
 const Settings = lazy(() => import('../pages/Settings'));
-const Tables = lazy(() => import('../pages/DataManagement'));
+const DataManagement = lazy(() => import('../pages/DataManagement'));
 
 const coreRoutes = [
   {
@@ -22,14 +23,19 @@ const coreRoutes = [
     component: FormLayout,
   },
   {
-    path: '/tables',
-    title: 'Tables',
-    component: Tables,
+    path: '/data-management',
+    title: 'Data Management',
+    component: DataManagement,
   },
   {
     path: '/settings',
     title: 'Settings',
     component: Settings,
+  },
+  {
+    path: '/data-management/form-upload',
+    title: 'Form Upload',
+    component: FormUpload,
   },
 ];
 

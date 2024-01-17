@@ -143,12 +143,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </NavLink>
               {/* <!-- Menu Item Dashboard --> */}
 
-              {/* <!-- Menu Item Tables --> */}
+              {/* <!-- Menu Item Data Management --> */}
               <li>
                 <NavLink
-                  to="/tables"
+                  to="/data-management"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-greendark dark:hover:bg-meta-4 ${
-                    pathname.includes('tables') && 'bg-greendark dark:bg-meta-4'
+                    pathname.includes('data-management') && 'bg-greendark dark:bg-meta-4'
                   }`}
                 >
                   <svg
@@ -179,7 +179,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Manajemen Data
                 </NavLink>
               </li>
-              {/* <!-- Menu Item Tables --> */}
+              {/* <!-- Menu Item Data Management --> */}
 
               
             </ul>
