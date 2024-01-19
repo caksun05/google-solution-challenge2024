@@ -5,6 +5,9 @@ from flask_uploads import UploadSet, configure_uploads, DATA
 from flask_restful import Api, Resource
 from google.cloud import firestore
 from chatbot import get_stuff_answer, initialize_chatbot
+import os
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
 
 # Flask application
 app = Flask(__name__)

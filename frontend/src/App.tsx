@@ -28,9 +28,9 @@ function App() {
       />
       <Routes>
         {/* Sign In Route*/}
-        <Route path="/auth/signin" element={<SignIn />} />
+        {/* <Route path="/auth/signin" element={<SignIn />} /> */}
         {/* Sing Up Route */}
-        <Route path="/auth/signup" element={<SignUp />} />
+        {/* <Route path="/auth/signup" element={<SignUp />} /> */}
         
         <Route element={<DefaultLayout />}>
           <Route index element={<ECommerce />} />
