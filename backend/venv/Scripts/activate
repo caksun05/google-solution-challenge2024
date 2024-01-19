@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\khanza\OneDrive - it.student.pens.ac.id\Proyek\cak-takim-chatbot\backend\venv"
+VIRTUAL_ENV="E:\Competition\Dinacom 2024\cak-takim-chatbot\backend\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
