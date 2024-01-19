@@ -27,7 +27,6 @@ const FormUpload = () => {
                                         id="filename"
                                         name="filename"
                                         placeholder="Masukkan nama file"
-                                        defaultValue="Masukkan nama file"
                                         className="w-full rounded border-2 border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     required/>
                                     </div>
@@ -42,7 +41,6 @@ const FormUpload = () => {
                                         id="description"
                                         name="description"
                                         placeholder="Deskripsi file"
-                                        defaultValue="Deskripsi file"
                                         className="w-full rounded border-2 border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     required></textarea>
                                 </div>
