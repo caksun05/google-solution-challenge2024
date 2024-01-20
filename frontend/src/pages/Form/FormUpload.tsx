@@ -2,6 +2,28 @@ import Breadcrumb from "../../components/Breadcrumb";
 import { NavLink } from 'react-router-dom';
 
 const FormUpload = () => {
+    // const navigate = useNavigate();
+    // const [filename, setFilename] = useState('');
+    // const [description, setDescription] = useState('');
+
+    // const handleSubmit = (event: React.SyntheticEvent) => {
+    //     event.preventDefault();
+
+    //     const data = new FormData();
+    //     data.append('filename', filename);
+    //     data.append('description', description);
+
+    //     axios.post('http://127.0.0.1:5000/api/upload/pdf', data)
+    //         .then(response => {
+    //         if (response.data.message === 'Data uploaded successfully') {
+    //                 navigate('/data-management');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('There was an error!', error);
+    //         });
+    // };
+    
     return (
         <>
             <div className="mx-auto max-w-270">
