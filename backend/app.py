@@ -70,11 +70,21 @@ class PDFUpload(Resource):
             filename = request.form['filename']
             description = request.form['description']
             pdf = request.files['pdf']
+            pdf_size = len(pdf.read())         
             pdf_path = pdfs.save(pdf)
+            
+            if pdf_size < 1000:
+                pdf_size = str(pdf_size) + ' B'
+            elif pdf_size < 1000000:
+                pdf_size = str(pdf_size / 1000) + ' KB'
+            else:
+                pdf_size = str(pdf_size / 1000000) + ' MB'
+
             metadata = {
                 'pdf_path': pdf_path,
                 'filename': filename,
-                'description': description}
+                'description': description,
+                'pdf_size': pdf_size}
             db.collection('metadata').add(metadata)
             return jsonify(metadata)
         return jsonify({'error': 'No PDF file provided!'})

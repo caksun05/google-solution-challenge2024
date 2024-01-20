@@ -58,16 +58,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-green duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-green duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/">
           <div className="flex justify-items-center content-center">
-            <img src={Logo} alt="Logo" className="w-15"/>
-          </div>  
+            <img src={Logo} alt="Logo" className="w-15" />
+            <div>
+              <h1 className="text-white font-bold text-2xl ml-5">Cak Takim Dashboard</h1>
+            </div>
+          </div>
         </NavLink>
 
         <button
@@ -102,17 +104,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-4 ml-4 text-sm font-semibold text-white">
               MENU
             </h3>
-
+            <hr className="my-6 border-gray-300 dark:border-meta-3" />
             <ul className="mb-6 flex flex-col gap-1.5">
-              
+
               {/* <!-- Menu Item Dashboard --> */}
               <NavLink
                 to="/"
-                className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-greendark dark:hover:bg-meta-4 ${
-                  (pathname === '/' ||
+                className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-greendark dark:hover:bg-meta-4 ${(pathname === '/' ||
                     pathname.includes('dashboard')) &&
                   'bg-greendark dark:bg-meta-4'
-                }`}
+                  }`}
               >
                 <svg
                   className="fill-current"
@@ -147,9 +148,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/data-management"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-greendark dark:hover:bg-meta-4 ${
-                    pathname.includes('data-management') && 'bg-greendark dark:bg-meta-4'
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-greendark dark:hover:bg-meta-4 ${pathname.includes('data-management') && 'bg-greendark dark:bg-meta-4'
+                    }`}
                 >
                   <svg
                     className="fill-current"
@@ -181,7 +181,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* <!-- Menu Item Data Management --> */}
 
-              
+
             </ul>
           </div>
         </nav>
