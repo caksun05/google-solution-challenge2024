@@ -1,5 +1,5 @@
 import pprint
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 from flask_bcrypt import Bcrypt
 from flask_uploads import UploadSet, configure_uploads, DATA
 from flask_restful import Api, Resource
@@ -84,9 +84,9 @@ class PDFUpload(Resource):
                 'pdf_path': pdf_path,
                 'filename': filename,
                 'description': description,
-                'pdf_size': pdf_size}
+                'pdf_size': pdf_size,}
             db.collection('metadata').add(metadata)
-            return jsonify(metadata)
+            return redirect('http://localhost:5173/data-management')
         return jsonify({'error': 'No PDF file provided!'})
 
 api.add_resource(PDFUpload, '/api/upload/pdf')

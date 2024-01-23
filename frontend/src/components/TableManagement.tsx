@@ -2,15 +2,14 @@ import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot } from "firebase/firestore";
 import db from './firebase/Config';
+import Loader from '../common/Loader';
 // import TableData from '../components/TableData';
 
 const TableManagement = () => {
-  const [metadatas, setMetadatas] = useState([{
-    filename: "Loading...",
-    id: "Initial", description:
-    "Loading..."
-  }]);
-  
+  const [metadatas, setMetadatas] = useState([]);
+
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(
     () => 
       onSnapshot(collection(db, "metadata"),(snapshot) => {
@@ -18,8 +17,14 @@ const TableManagement = () => {
       }),
     []
   );
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
   
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-auto mb-4">
         <h3 className="mb-5 text-2xl font-bold text-black dark:text-white mr-auto">Tabel Data</h3>
@@ -42,11 +47,16 @@ const TableManagement = () => {
                   Deskripsi
                 </h5>
               </th>
-              {/* <th className="min-w-[120px] py-4 px-4 xl:px-8 xl:py-6">
+              {/* <th className="min-w-[150px] py-4 px-4 xl:px-8 xl:py-6">
+                <h5 className="text-sm font-medium uppercase xsm:text-base">
+                  Tanggal Rilis
+                </h5>
+              </th> */}
+              <th className="min-w-[120px] py-4 px-4 xl:px-8 xl:py-6">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
                   Ukuran File
                 </h5>
-              </th> */}
+              </th>
               <th className="py-4 px-4 xl:px-8 xl:py-6">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
                   Aksi
@@ -68,8 +78,15 @@ const TableManagement = () => {
                   </p>
                 </td>
                 {/* <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
-                  1.2 MB
+                  <p className="text-black dark:text-white">
+                    {metadata.timestamp}
+                  </p>
                 </td> */}
+                <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
+                  <p className="text-black dark:text-white">
+                    {metadata.pdf_size}
+                  </p>
+                </td>
                 <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                   <div className="flex items-center space-x-3.5">
                     <button className="hover:text-primary">
