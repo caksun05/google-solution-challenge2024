@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {  signOut } from "firebase/auth";
+import {auth} from './firebase/Config';
+import { useNavigate } from 'react-router-dom';
 
 import UserOne from '../images/user/user-01.png';
 
@@ -8,6 +11,18 @@ const DropdownUser = () => {
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const navigate = useNavigate();
+ 
+  const handleLogout = () => {               
+      signOut(auth).then(() => {
+      // Sign-out successful.
+          navigate("/signin");
+          console.log("Signed out successfully")
+      }).catch((error) => {
+      // An error happened.
+      });
+  }
 
   // close on click outside
   useEffect(() => {
@@ -108,7 +123,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-danger lg:text-base">
+        <button onClick={handleLogout} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-danger lg:text-base">
           <svg
             className="fill-current"
             width="22"

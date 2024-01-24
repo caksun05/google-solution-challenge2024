@@ -1,7 +1,45 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
+import React, {useState} from 'react';
+import { signInWithCredential, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {auth} from '../../components/firebase/Config';
+import { NavLink, useNavigate } from 'react-router-dom'
+
 
 const SignIn = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleGoogleSignIn = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            const user = auth.currentUser;
+            navigate("/")
+            console.log('Sign in with Google successful', user);
+        } catch (error) {
+            console.error('Error signing in with Google', error);
+        }
+    };
+     
+    const onLogin = (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            navigate("/")
+            console.log(user);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+        });
+       
+    }
+
     return (
         <div className="h-screen">
             <div className="h-full flex flex-wrap items-center">
@@ -12,7 +50,7 @@ const SignIn = () => {
                             <h2 className="mb-1.5 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                                 Masuk
                             </h2>
-                            <span className="mb-9 block font-medium">Selamat datang di CakTakim Dashboard</span>
+                            <span className="mb-9 block font-medium">Selamat datang di Cak Takim Dashboard</span>
                         </div>
                         <form action="" className="px-4 xl:px-25 sm:px-25 lg:px-50">
                             <div className="mb-4">
@@ -21,6 +59,8 @@ const SignIn = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={email}
                                         type="email"
                                         placeholder="Masukkan email"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -34,6 +74,8 @@ const SignIn = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={password}
                                         type="password"
                                         placeholder="Masukkan password"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -57,12 +99,12 @@ const SignIn = () => {
                             </div>
 
                             <div className="mb-4">
-                                <button type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
+                                <button onClick={onLogin} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign In
                                 </button>
                             </div>
 
-                            <button className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                            <button onClick={handleGoogleSignIn} className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                 <span>
                                     <svg
                                     width="20"
