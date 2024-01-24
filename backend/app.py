@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import UploadSet, configure_uploads, DATA
 from flask_restful import Api, Resource
 from google.cloud import firestore
+from datetime import datetime
 from chatbot import get_stuff_answer, initialize_chatbot
 import os
 
@@ -72,6 +73,7 @@ class PDFUpload(Resource):
             pdf = request.files['pdf']
             pdf_size = len(pdf.read())         
             pdf_path = pdfs.save(pdf)
+            timestamp = datetime.now().strftime('%d-%m-%Y')
             
             if pdf_size < 1000:
                 pdf_size = str(pdf_size) + ' B'
@@ -84,7 +86,8 @@ class PDFUpload(Resource):
                 'pdf_path': pdf_path,
                 'filename': filename,
                 'description': description,
-                'pdf_size': pdf_size,}
+                'pdf_size': pdf_size,
+                'timestamp': timestamp}
             db.collection('metadata').add(metadata)
             return redirect('http://localhost:5173/data-management')
         return jsonify({'error': 'No PDF file provided!'})
