@@ -1,13 +1,73 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import UserOne from '../images/user/user-01.png';
+import { signOut } from "firebase/auth";
+import { auth } from './firebase/Config';
+import { useNavigate } from 'react-router-dom';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { collection, doc, getDoc } from 'firebase/firestore';
+import { db, storage } from './firebase/Config';
+import { onAuthStateChanged } from "firebase/auth";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const uid = user.uid;
+          const imageRef = ref(storage, `images/user/${uid}/profile.png`);
+          getDownloadURL(imageRef)
+            .then((url) => {
+              const img = document.getElementById('profile-img');
+              img?.setAttribute('src', url);
+            })
+            .catch((error) => {
+              const imageRef = ref(storage, `images/user/default.png`);
+              getDownloadURL(imageRef)
+                .then((url) => {
+                  const img = document.getElementById('profile-img');
+                  img?.setAttribute('src', url);
+                })
+            });
+
+          const usersCollection = collection(db, 'users');
+          const userDocRef = doc(usersCollection, user.uid);
+
+          // Fetch user data from Firestore
+          const docSnap = await getDoc(userDocRef);
+          if (docSnap.exists()) {
+            setUserData(docSnap.data());
+          } else {
+            console.log('User document not found!');
+          }
+        } else {
+          // User is signed out
+          navigate('/signin');
+          console.log('User is logged out');
+        }
+      });
+    };
+
+    fetchUserData();
+  }, [auth]);
+
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      navigate("/signin");
+      console.log("Signed out successfully")
+    }).catch((error) => {
+      // An error happened.
+      console.log("Error: ", error)
+    });
+  }
 
   // close on click outside
   useEffect(() => {
@@ -45,18 +105,17 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Shakan Jeva
+            {userData?.fullname || 'User'}
           </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+          <img id="profile-img" alt="User" />
         </span>
 
         <svg
-          className={`hidden fill-current sm:block ${
-            dropdownOpen ? 'rotate-180' : ''
-          }`}
+          className={`hidden fill-current sm:block ${dropdownOpen ? 'rotate-180' : ''
+            }`}
           width="12"
           height="8"
           viewBox="0 0 12 8"
@@ -77,9 +136,8 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-          dropdownOpen === true ? 'block' : 'hidden'
-        }`}
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${dropdownOpen === true ? 'block' : 'hidden'
+          }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
@@ -108,7 +166,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-danger lg:text-base">
+        <button onClick={handleLogout} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-danger lg:text-base">
           <svg
             className="fill-current"
             width="22"

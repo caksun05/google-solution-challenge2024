@@ -1,22 +1,39 @@
-import { useEffect, useState } from 'react';
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
-import db from './firebase/Config';
-import Loader from '../common/Loader';
+import React, { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './firebase/Config';
+import { useNavigate } from 'react-router-dom';
+import { db } from './firebase/Config';
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { useState } from "react";
 
 const CardThree = () => {
-  const [metadatas, setMetadatas] = useState([]);
-  const [docCount, setDocCount] = useState(0);
-  
-  useEffect(() => {
-    const unsub = onSnapshot(collection(db, "metadata"),(snapshot) => {
-      setMetadatas(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      setDocCount(snapshot.size);
-      console.log("Total documents in collection: ", snapshot.size);
-    }
-    );
+  const Navigate = useNavigate()
+  const [totalDocuments, setTotalDocuments] = useState(0);
 
-    return unsub;
-  }, []);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        const documentsCollection = collection(db, "metadata");
+        const docRef = doc(documentsCollection);
+        getDocs(documentsCollection).then((querySnapshot) => {
+          const total = querySnapshot.size;
+          setTotalDocuments(total);
+          console.log('Total dokumen dalam koleksi:', totalDocuments);
+        }).catch((error) => {
+          console.error('Error mengambil data koleksi:', error);
+        });
+
+
+      } else {
+        // User is signed out
+        Navigate('/signin')
+        console.log("user is logged out")
+      }
+    });
+
+  }, [])
 
   return (
     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -36,7 +53,7 @@ const CardThree = () => {
       <div className="mt-4 flex items-end justify-between">
         <div>
           <h4 className="text-title-md font-bold text-black dark:text-white">
-            {docCount}
+            {totalDocuments}
           </h4>
           <span className="text-sm font-medium">Total Dokumen</span>
         </div>

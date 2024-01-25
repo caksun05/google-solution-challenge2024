@@ -1,7 +1,48 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
+import React, {useState} from 'react';
+import { signInWithCdangerential, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {auth} from '../../components/firebase/Config';
+import { NavLink, useNavigate } from 'react-router-dom'
+
 
 const SignIn = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleGoogleSignIn = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            const user = auth.currentUser;
+            navigate("/")
+            console.log('Sign in with Google successful', user);
+        } catch (error) {
+            console.error('Error signing in with Google', error);
+        }
+    };
+
+    const onLogin = (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCdangerential) => {
+            // Signed in
+            const user = userCdangerential.user;
+            navigate("/")
+            console.log(user);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const errorCustom = "Maaf, password atau email yang Anda masukkan salah";
+            setError(errorCustom)
+            console.log(errorCode, errorMessage)
+        });
+
+    }
+
     return (
         <div className="h-screen">
             <div className="h-full flex flex-wrap items-center">
@@ -12,7 +53,7 @@ const SignIn = () => {
                             <h2 className="mb-1.5 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                                 Masuk
                             </h2>
-                            <span className="mb-9 block font-medium">Selamat datang di CakTakim Dashboard</span>
+                            <span className="mb-9 block font-medium">Selamat datang di Cak Takim Dashboard</span>
                         </div>
                         <form action="" className="px-4 xl:px-25 sm:px-25 lg:px-50">
                             <div className="mb-4">
@@ -21,10 +62,12 @@ const SignIn = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={email}
                                         type="email"
                                         placeholder="Masukkan email"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        required
+                                        requidanger
                                     />
                                 </div>
                             </div>
@@ -34,10 +77,12 @@ const SignIn = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={password}
                                         type="password"
                                         placeholder="Masukkan password"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        required
+                                        requidanger
                                     />
                                 </div>
                             </div>
@@ -45,7 +90,7 @@ const SignIn = () => {
                             <div className="flex mb-4">
                                 {/* <div className="flex">
                                     <div className="items-center h-5">
-                                        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray dark:focus:ring-offset-gray" requidanger />
                                     </div>
                                     <label htmlFor="remember" className="ms-2 text-sm font-medium text-dark dark:text-white">Remember me</label>
                                 </div> */}
@@ -55,14 +100,29 @@ const SignIn = () => {
                                     </Link>
                                 </div>
                             </div>
+                            
+                            {error &&
+                            <div id="alert"
+                                className="flex rounded-full items-center p-3 mb-4 text-danger border-danger shadow-sm dark:text-danger dark:bg-meta-4 dark:border-danger"
+                                role="alert">
+                                <svg className="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <div className="ms-3 text-sm font-medium">
+                                    <p className="my-2 block font-medium text-danger dark:text-danger">{error}</p>
+                                </div>
+                            </div>}
+
 
                             <div className="mb-4">
-                                <button type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
+                                <button onClick={onLogin} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign In
                                 </button>
                             </div>
 
-                            <button className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                            <button onClick={handleGoogleSignIn} className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                 <span>
                                     <svg
                                     width="20"

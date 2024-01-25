@@ -1,26 +1,66 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
+import React, {useState} from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import {  createUserWithEmailAndPassword  } from 'firebase/auth';
+import {auth} from '../../components/firebase/Config';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../../components/firebase/Config';
+import { ref } from 'firebase/storage';
+import { storage } from '../../components/firebase/Config';
 
 const SignUp = () => {
+
+    const navigate = useNavigate();
+    
+    const [fullname, setFullname] = useState('');
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('');
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+
+        await createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log(user);
+            setDoc(doc(collection(db, "users"), user.uid), {
+                fullname: fullname,
+                email: email,
+                phone: "",
+                bio: "",                
+            })
+            navigate("/signin")
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+        });
+    }
+
     return (
         <div className="h-screen">
             <div className="h-full flex flex-wrap items-center">
                 <div className="w-full xl:w-1/2">
                     <div className="w-full p-10.5 sm:px-12.5 xl:px-17.5">
-                        <div className="px-4 xl:px-25 sm:px-14">
+                        <div className="px-4 xl:px-25 sm:px-25 lg:px-50">
                             <img className="w-12 xl:hidden dark:block mb-4" src={Logo} alt="Logo" />
                             <h2 className="mb-1.5 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                                 Daftar
                             </h2>
                             <span className="mb-9 block font-medium">Daftarkan Anda untuk mengelola Dashboard.</span>
                         </div>
-                        <form action="" className="px-4 xl:px-25 sm:px-14">
+                        <form action="" className="px-4 xl:px-25 sm:px-25 lg:px-50">
                             <div className="mb-4">
                                 <label htmlFor="nama" className="mb-2.5 block font-medium text-black dark:text-white">
                                     Nama*
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setFullname(e.target.value)}
+                                        value={fullname}
                                         type="text"
                                         placeholder="Carl Johnson"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -34,6 +74,8 @@ const SignUp = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={email}
                                         type="email"
                                         placeholder="example@mail.com"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -47,6 +89,8 @@ const SignUp = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={password}
                                         type="password"
                                         placeholder="Kombinasi huruf dan angka minimal 8 karakter"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -54,9 +98,9 @@ const SignUp = () => {
                                     />
                                 </div>
                             </div>
-                          
+                            
                             <div className="mb-4">
-                                <button type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
+                                <button onClick={onSubmit} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign Up
                                 </button>
                             </div>

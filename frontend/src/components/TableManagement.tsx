@@ -1,13 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
-import db from './firebase/Config';
+import { db } from './firebase/Config';
 import Loader from '../common/Loader';
 // import TableData from '../components/TableData';
 
 const TableManagement = () => {
   const [metadatas, setMetadatas] = useState([]);
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
