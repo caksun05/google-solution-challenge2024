@@ -4,11 +4,16 @@ import React, {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {  createUserWithEmailAndPassword  } from 'firebase/auth';
 import {auth} from '../../components/firebase/Config';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../../components/firebase/Config';
+import { ref } from 'firebase/storage';
+import { storage } from '../../components/firebase/Config';
 
 const SignUp = () => {
 
     const navigate = useNavigate();
- 
+    
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
  
@@ -20,6 +25,12 @@ const SignUp = () => {
             // Signed in
             const user = userCredential.user;
             console.log(user);
+            setDoc(doc(collection(db, "users"), user.uid), {
+                name: name,
+                email: email,
+                phone: "",
+                bio: "",                
+            })
             navigate("/signin")
         })
         .catch((error) => {
@@ -27,8 +38,6 @@ const SignUp = () => {
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
         });
- 
-   
     }
 
     return (
@@ -50,6 +59,8 @@ const SignUp = () => {
                                 </label>
                                 <div className="relative">
                                     <input
+                                        onChange={(e) => setName(e.target.value)}
+                                        value={name}
                                         type="text"
                                         placeholder="Carl Johnson"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
