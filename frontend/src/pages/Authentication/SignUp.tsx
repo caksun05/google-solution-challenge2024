@@ -1,21 +1,11 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {  createUserWithEmailAndPassword  } from 'firebase/auth';
-import {auth} from '../../components/firebase/Config';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../../components/firebase/Config';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { db } from '../../components/firebase/Config';
 import { ref } from 'firebase/storage';
-import { storage } from '../../components/firebase/Config';
-import React, {useState} from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import {  createUserWithEmailAndPassword  } from 'firebase/auth';
-import {auth} from '../../components/firebase/Config';
-import { collection, doc, setDoc } from 'firebase/firestore';
-import { db } from '../../components/firebase/Config';
-import { ref } from 'firebase/storage';
-import { storage } from '../../components/firebase/Config';
 
 const SignUp = () => {
 
