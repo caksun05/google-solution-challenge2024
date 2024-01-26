@@ -52,6 +52,7 @@ def logout():
 
 @app.route('/chatbot', methods=['GET'])
 def chatbot():
+    time_start = datetime.now()
     question = request.args.get('question')
     
     if not question:
@@ -60,7 +61,19 @@ def chatbot():
     try:
         vector_index, stuff_chain = initialize_chatbot()
         stuff_answer = get_stuff_answer(vector_index, stuff_chain, question)
+        time_stop = datetime.now()
+        response_time = (time_stop - time_start).total_seconds()
+
+        history = {
+        'question': question,
+        'answer': stuff_answer['output_text'],
+        'timestamp': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
+        'response_time': response_time
+         }
+        
+        db.collection('chatHistory').add(history)
         return jsonify(stuff_answer), 200
+    
     except Exception as e:
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
     
