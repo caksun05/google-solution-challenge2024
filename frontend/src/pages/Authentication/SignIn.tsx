@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
-import React, {useState} from 'react';
-import { signInWithCredential, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {useState} from 'react';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import {auth} from '../../components/firebase/Config';
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 const SignIn = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleGoogleSignIn = async () => {
         try {
@@ -22,22 +23,24 @@ const SignIn = () => {
             console.error('Error signing in with Google', error);
         }
     };
-     
-    const onLogin = (e) => {
+
+    const onLogin = (e: any) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then((userCdangerential) => {
             // Signed in
-            const user = userCredential.user;
+            const user = userCdangerential.user;
             navigate("/")
             console.log(user);
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            const errorCustom = "Maaf, password atau email yang Anda masukkan salah";
+            setError(errorCustom)
             console.log(errorCode, errorMessage)
         });
-       
+
     }
 
     return (
@@ -60,7 +63,7 @@ const SignIn = () => {
                                 <div className="relative">
                                     <input
                                         onChange={(e) => setEmail(e.target.value)}
-                                        value={email}
+                                        value={email}                                        
                                         type="email"
                                         placeholder="Masukkan email"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -87,7 +90,7 @@ const SignIn = () => {
                             <div className="flex mb-4">
                                 {/* <div className="flex">
                                     <div className="items-center h-5">
-                                        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray dark:focus:ring-offset-gray" requidanger />
                                     </div>
                                     <label htmlFor="remember" className="ms-2 text-sm font-medium text-dark dark:text-white">Remember me</label>
                                 </div> */}
@@ -97,13 +100,27 @@ const SignIn = () => {
                                     </Link>
                                 </div>
                             </div>
+                            
+                            {error &&
+                            <div id="alert"
+                                className="flex rounded-full items-center p-3 mb-4 text-danger border-danger shadow-sm dark:text-danger dark:bg-meta-4 dark:border-danger"
+                                role="alert">
+                                <svg className="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <div className="ms-3 text-sm font-medium">
+                                    <p className="my-2 block font-medium text-danger dark:text-danger">{error}</p>
+                                </div>
+                            </div>}
 
-                            <div className="mb-4">
+
+                            <div className="mb-4">                                
                                 <button onClick={onLogin} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign In
                                 </button>
-                            </div>
-
+                            </div>                        
                             <button onClick={handleGoogleSignIn} className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                 <span>
                                     <svg

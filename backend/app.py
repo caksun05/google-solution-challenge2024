@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import UploadSet, configure_uploads, DATA
 from flask_restful import Api, Resource
 from google.cloud import firestore
+from datetime import datetime
 from chatbot import get_stuff_answer, initialize_chatbot
 import os
 import datetime
@@ -73,7 +74,7 @@ class PDFUpload(Resource):
             pdf = request.files['pdf']
             pdf_path = pdfs.save(pdf)
             pdf_size = len(pdf.read())                     
-            timestamp = datetime.now()
+            timestamp = datetime.now().strftime('%d-%m-%Y')
             
             if pdf_size < 1000:
                 pdf_size = str(round(pdf_size, 2)) + ' B'

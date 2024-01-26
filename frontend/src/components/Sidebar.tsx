@@ -104,7 +104,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-4 ml-4 text-sm font-semibold text-white">
               MENU
             </h3>
-            <hr className="my-6 border-gray-300 dark:border-meta-3" />
+            <hr className="my-6 border-gray dark:border-meta-4" />
             <ul className="mb-6 flex flex-col gap-1.5">
 
               {/* <!-- Menu Item Dashboard --> */}
