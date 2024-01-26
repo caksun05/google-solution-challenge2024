@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../components/firebase/Config';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { ref } from 'firebase/storage';
+// import { ref } from 'firebase/storage';
 
 const SignUp = () => {
 

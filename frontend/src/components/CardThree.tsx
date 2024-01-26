@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './firebase/Config';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/Config';
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { useState } from "react";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 const CardThree = () => {
   const Navigate = useNavigate()

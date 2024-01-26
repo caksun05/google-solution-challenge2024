@@ -9,7 +9,12 @@ import Loader from '../common/Loader';
 const TableManagement = () => {
   const [metadatas, setMetadatas] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [itemOffset, setItemOffset] = useState(0);
+
   const itemsPerPage = 5;
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = metadatas.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(metadatas.length / itemsPerPage);
 
   useEffect(() => {
       const collectionRef = collection(db, "metadata");
@@ -27,33 +32,19 @@ const TableManagement = () => {
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
-  
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
-  const [itemOffset, setItemOffset] = useState(0);
-
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = metadatas.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(metadatas.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % metadatas.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className=" rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <form>
         <div className="flex flex-auto mb-9 mt-2 items-center">
           <h3 className="text-2xl font-bold text-black dark:text-white mr-auto">Tabel Data</h3>
+
           {/* <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label> */}
           {/* <div className=" mr-5">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -76,6 +67,7 @@ const TableManagement = () => {
             + Tambah
           </NavLink>
         </div>
+        {/* To add table height */}
         <div className="max-w-full overflow-x-auto">
           {loading ? (
             <Loader />
@@ -219,8 +211,7 @@ const TableManagement = () => {
               </tbody>
             </table>
           )}
-
-          {/* <Items currentItems={currentItems} /> */}
+        </div>
           <ReactPaginate
             breakLabel="..."
             nextLabel="next >"
@@ -235,41 +226,6 @@ const TableManagement = () => {
             nextLinkClassName="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-greendark rounded-e-lg hover:bg-green hover:text-white dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-green dark:hover:text-white"
             activeClassName="text-white border-green bg-green dark:bg-green dark:text-white"
           />
-
-          {/* <nav aria-label="Page navigation example" className="my-5">
-            <ul className="inline-flex -space-x-px text-base h-10">
-              <li>
-                <a href="#"
-                  className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-green hover:text-white dark:bg-meta-4 dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-greendark dark:hover:text-white">Previous</a>
-              </li>
-              <li>
-                <a href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-green hover:text-white dark:bg-meta-4 dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-greendark dark:hover:text-white">1</a>
-              </li>
-              <li>
-                <a href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-green hover:text-white dark:bg-meta-4 dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-greendark dark:hover:text-white">2</a>
-              </li>
-              <li>
-                <a href="#" aria-current="page"
-                  className="flex items-center justify-center px-4 h-10 text-white border border-gray-300 bg-green hover:bg-blue-100 hover:text-blue-700 dark:border-bodydark2 dark:bg-gray-700 dark:text-white">3</a>
-              </li>
-              <li>
-                <a href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-green hover:text-white dark:bg-meta-4 dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-greendark dark:hover:text-white">4</a>
-              </li>
-              <li>
-                <a href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-green hover:text-white dark:bg-meta-4 dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-greendark dark:hover:text-white">5</a>
-              </li>
-              <li>
-                <a href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-green hover:text-white dark:bg-meta-4 dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-greendark dark:hover:text-white">Next</a>
-              </li>
-            </ul>
-          </nav> */}
-
-        </div>
       </form>
     </div>
   );
