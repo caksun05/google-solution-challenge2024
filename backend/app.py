@@ -4,12 +4,17 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import UploadSet, configure_uploads, DATA
 from flask_restful import Api, Resource
 from google.cloud import firestore
+import firebase_admin
+from firebase_admin import credentials, storage
+from firebase_admin import storage as fb_storage
 from datetime import datetime
 from chatbot import get_stuff_answer, initialize_chatbot
 import os
-import datetime
+from datetime import datetime
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
+cred = credentials.Certificate('key.json')
+firebase_admin.initialize_app(cred, {'storageBucket': 'chatbot-1000.appspot.com'})
 
 # Flask application
 app = Flask(__name__)
@@ -72,8 +77,14 @@ class PDFUpload(Resource):
             filename = request.form['filename']
             description = request.form['description']
             pdf = request.files['pdf']
-            pdf_path = pdfs.save(pdf)
-            pdf_size = len(pdf.read())                     
+
+            # Simpan file ke Firebase Storage
+            bucket = fb_storage.bucket()
+            blob = bucket.blob(f'documents/{filename}.pdf')
+            blob.upload_from_file(pdf)
+            pdf_path = f'https://firebasestorage.googleapis.com/v0/b/chatbot-1000.appspot.com/o/documents%2F{filename}.pdf?alt=media'
+
+            pdf_size = bucket.get_blob(f'documents/{filename}.pdf').size
             timestamp = datetime.now().strftime('%d-%m-%Y')
             
             if pdf_size < 1000:
@@ -90,7 +101,8 @@ class PDFUpload(Resource):
                 'pdf_size': pdf_size,
                 'timestamp': timestamp}
             db.collection('metadata').add(metadata)
-            return redirect('http://localhost:5173/data-management')
+            # return redirect('http://localhost:5173/data-management')
+            return jsonify(metadata)
         return jsonify({'error': 'No PDF file provided!'})
 
 api.add_resource(PDFUpload, '/api/upload/pdf')
