@@ -54,7 +54,6 @@ const SignIn = () => {
                                 Masuk
                             </h2>
                             <span className="mb-9 block font-medium">Selamat datang di Cak Takim Dashboard</span>
-                            <span className="mb-9 block font-medium">Selamat datang di Cak Takim Dashboard</span>
                         </div>
                         <form action="" className="px-4 xl:px-25 sm:px-25 lg:px-50">
                             <div className="mb-4">
@@ -63,8 +62,6 @@ const SignIn = () => {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         value={email}
                                         type="email"
@@ -80,8 +77,6 @@ const SignIn = () => {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         value={password}
                                         type="password"
@@ -123,12 +118,10 @@ const SignIn = () => {
 
                             <div className="mb-4">
                                 <button onClick={onLogin} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
-                                <button onClick={onLogin} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign In
                                 </button>
                             </div>
 
-                            <button onClick={handleGoogleSignIn} className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                             <button onClick={handleGoogleSignIn} className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                 <span>
                                     <svg

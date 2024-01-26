@@ -74,8 +74,6 @@ const SignUp = () => {
                                     <input
                                         onChange={(e) => setEmail(e.target.value)}
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        value={email}
                                         type="email"
                                         placeholder="example@mail.com"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -91,8 +89,6 @@ const SignUp = () => {
                                     <input
                                         onChange={(e) => setPassword(e.target.value)}
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        value={password}
                                         type="password"
                                         placeholder="Kombinasi huruf dan angka minimal 8 karakter"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -102,7 +98,6 @@ const SignUp = () => {
                             </div>
                             
                             <div className="mb-4">
-                                <button onClick={onSubmit} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                 <button onClick={onSubmit} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign Up
                                 </button>
