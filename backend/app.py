@@ -6,6 +6,7 @@ from flask_restful import Api, Resource
 from google.cloud import firestore
 from chatbot import get_stuff_answer, initialize_chatbot
 import os
+import datetime
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
 
@@ -70,21 +71,23 @@ class PDFUpload(Resource):
             filename = request.form['filename']
             description = request.form['description']
             pdf = request.files['pdf']
-            pdf_size = len(pdf.read())         
             pdf_path = pdfs.save(pdf)
+            pdf_size = len(pdf.read())                     
+            timestamp = datetime.now()
             
             if pdf_size < 1000:
-                pdf_size = str(pdf_size) + ' B'
+                pdf_size = str(round(pdf_size, 2)) + ' B'
             elif pdf_size < 1000000:
-                pdf_size = str(pdf_size / 1000) + ' KB'
+                pdf_size = str(round(pdf_size / 1000, 2)) + ' KB'
             else:
-                pdf_size = str(pdf_size / 1000000) + ' MB'
+                pdf_size = str(round(pdf_size / 1000000, 2)) + ' MB'
 
             metadata = {
                 'pdf_path': pdf_path,
                 'filename': filename,
                 'description': description,
-                'pdf_size': pdf_size,}
+                'pdf_size': pdf_size,
+                'timestamp': timestamp}
             db.collection('metadata').add(metadata)
             return redirect('http://localhost:5173/data-management')
         return jsonify({'error': 'No PDF file provided!'})

@@ -34,7 +34,7 @@ def initialize_chatbot():
         try:
             loader = PyPDFLoader(pdf_path)
             documents.extend(loader.load_and_split())
-        except Exception as e:
+        except Exception as e:  
             print(f"Error loading PDF file {pdf_path}: {str(e)}")
 
     if not documents:
