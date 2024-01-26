@@ -1,36 +1,79 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHref } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
-import { db } from './firebase/Config';
+import { collection, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
+import { db, storage } from './firebase/Config';
 import Loader from '../common/Loader';
+import { doc, deleteDoc } from "firebase/firestore";
+import { ref, deleteObject, getDownloadURL } from "firebase/storage";
+
 // import TableData from '../components/TableData';
 
 const TableManagement = () => {
-  const [metadatas, setMetadatas] = useState([]);
+  const [metadatas, setMetadatas] = useState<{ id: string }[]>([]);
   // const [search, setSearch] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-      const collectionRef = collection(db, "metadata");
-      const q = query(collectionRef, orderBy("timestamp", "desc"));
-    
-      const unsub = onSnapshot(q,(snapshot) => {
-        setMetadatas(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-        console.log("Total documents in collection: ", snapshot.size);
-      }
-      );
+    // ambil seluruh data dengan pengurutan berdasarkan timestamp
+    const collectionRef = collection(db, "metadata");
+    const q = query(collectionRef, orderBy("timestamp", "desc"));
 
-      return unsub;
-    }, []);
+    getDocs(q)
+      .then((querySnapshot) => {
+        setMetadatas(
+          querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }))
+        );
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error mengambil data koleksi:', error);
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
+
+  const handleDeleteDocument = async (id: any, filename: any) => {
+    try {
+      // Delete document from Firestore
+      const documentRef = doc(db, "metadata", id);
+      await deleteDoc(documentRef);
+
+      // Delete document from Firebase Storage
+      const storageRef = ref(storage, `documents/${filename}.pdf`);
+      await deleteObject(storageRef);
+
+      console.log("Document successfully deleted!");
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
+  };
+
+  const handleOpenDocument = (url: string) => {
+    const newWindow = window.open();
+    if (newWindow) {
+      newWindow.document.write(`
+        <html>
+          <body style="margin: 0;">
+            <iframe src="${url}" width="100%" height="100%"></iframe>
+          </body>
+        </html>
+      `);
+    } else {
+      console.error("Failed to open a new window.");
+    }
+  };
   
+
   // const Filter = (event) => {
   //   setRecords(data.filter)
   // }
-  
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <form>
@@ -102,7 +145,7 @@ const TableManagement = () => {
                   <tr key={id}>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {id+1}
+                        {id + 1}
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
@@ -127,7 +170,7 @@ const TableManagement = () => {
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <div className="flex items-center space-x-3.5">
-                        <button className="hover:text-primary">
+                        <button className="hover:text-primary" onClick={() => handleOpenDocument(metadata.pdf_path)}>
                           <svg
                             className="fill-current"
                             width="18"
@@ -146,8 +189,8 @@ const TableManagement = () => {
                             />
                           </svg>
                         </button>
-                        
-                        <button className="hover:text-primary">
+
+                        <button className="hover:text-primary" onClick={() => window.open(metadata.pdf_path, "_blank")}>
                           <svg
                             className="fill-current"
                             width="18"
@@ -167,7 +210,7 @@ const TableManagement = () => {
                           </svg>
                         </button>
 
-                        <button className="hover:text-danger">
+                        <button className="hover:text-danger" onClick={() => handleDeleteDocument(metadata.id, metadata.filename)}>
                           <svg
                             className="fill-current"
                             width="18"
@@ -196,7 +239,7 @@ const TableManagement = () => {
                         </button>
                       </div>
                     </td>
-                  </tr>
+                  </tr>                  
                 ))}
               </tbody>
             </table>

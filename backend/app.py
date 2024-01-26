@@ -114,8 +114,8 @@ class PDFUpload(Resource):
                 'pdf_size': pdf_size,
                 'timestamp': timestamp}
             db.collection('metadata').add(metadata)
-            # return redirect('http://localhost:5173/data-management')
-            return jsonify(metadata)
+            return redirect('http://localhost:5173/data-management')
+            # return jsonify(metadata)
         return jsonify({'error': 'No PDF file provided!'})
 
 api.add_resource(PDFUpload, '/api/upload/pdf')

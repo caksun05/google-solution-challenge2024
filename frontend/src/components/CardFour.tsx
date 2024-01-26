@@ -1,4 +1,34 @@
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './firebase/Config';
+import { useNavigate } from 'react-router-dom';
+import { db } from './firebase/Config';
+import { collection, getDocs } from "firebase/firestore";
+import { useState } from "react";
+
 const CardFour = () => {
+  const Navigate = useNavigate()
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        const usersCollection = collection(db, "users");
+        getDocs(usersCollection).then((querySnapshot) => {
+          const total = querySnapshot.size;
+          setTotalUsers(total);
+        }).catch((error) => {
+          console.error('Error mengambil data koleksi:', error);
+        });
+      } else {
+        // User is signed out
+        Navigate('/signin')
+        console.log("user is logged out")
+      }
+    });
+  }, [])
+
   return (
     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
@@ -28,7 +58,7 @@ const CardFour = () => {
       <div className="mt-4 flex items-end justify-between">
         <div>
           <h4 className="text-title-md font-bold text-black dark:text-white">
-            5.456
+            {totalUsers}
           </h4>
           <span className="text-sm font-medium">Total Pengguna</span>
         </div>
