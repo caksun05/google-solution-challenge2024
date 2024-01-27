@@ -1,20 +1,20 @@
-import { NavLink, useHref } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { collection, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
+import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import { db, storage } from './firebase/Config';
 import Loader from '../common/Loader';
 import { doc, deleteDoc } from "firebase/firestore";
-import { ref, deleteObject, getDownloadURL } from "firebase/storage";
+import { ref, deleteObject } from "firebase/storage";
+import ReactPaginate from 'react-paginate';
 
 // import TableData from '../components/TableData';
 
 const TableManagement = () => {
-  const [metadatas, setMetadatas] = useState<{ id: string }[]>([]);
+  const [metadatas, setMetadatas] = useState<any>([]);
   // const [search, setSearch] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // ambil seluruh data dengan pengurutan berdasarkan timestamp
     const collectionRef = collection(db, "metadata");
     const q = query(collectionRef, orderBy("timestamp", "desc"));
 
@@ -68,7 +68,7 @@ const TableManagement = () => {
       console.error("Failed to open a new window.");
     }
   };
-  
+
 
   // const Filter = (event) => {
   //   setRecords(data.filter)
@@ -141,7 +141,7 @@ const TableManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {metadatas.map((metadata, id) => (
+                {metadatas.map((metadata: any, id: any) => (
                   <tr key={id}>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
@@ -239,7 +239,7 @@ const TableManagement = () => {
                         </button>
                       </div>
                     </td>
-                  </tr>                  
+                  </tr>
                 ))}
               </tbody>
             </table>
