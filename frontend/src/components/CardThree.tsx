@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './firebase/Config';
 import { useNavigate } from 'react-router-dom';
@@ -15,11 +16,9 @@ const CardThree = () => {
       if (user) {
         const uid = user.uid;
         const documentsCollection = collection(db, "metadata");
-        const docRef = doc(documentsCollection);
         getDocs(documentsCollection).then((querySnapshot) => {
           const total = querySnapshot.size;
           setTotalDocuments(total);
-          console.log('Total dokumen dalam koleksi:', totalDocuments);
         }).catch((error) => {
           console.error('Error mengambil data koleksi:', error);
         });

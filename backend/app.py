@@ -4,11 +4,17 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import UploadSet, configure_uploads, DATA
 from flask_restful import Api, Resource
 from google.cloud import firestore
+import firebase_admin
+from firebase_admin import credentials, storage
+from firebase_admin import storage as fb_storage
 from datetime import datetime
 from chatbot import get_stuff_answer, initialize_chatbot
 import os
+from datetime import datetime
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
+cred = credentials.Certificate('key.json')
+firebase_admin.initialize_app(cred, {'storageBucket': 'chatbot-1000.appspot.com'})
 
 # Flask application
 app = Flask(__name__)
@@ -46,6 +52,7 @@ def logout():
 
 @app.route('/chatbot', methods=['GET'])
 def chatbot():
+    time_start = datetime.now()
     question = request.args.get('question')
     
     if not question:
@@ -54,7 +61,19 @@ def chatbot():
     try:
         vector_index, stuff_chain = initialize_chatbot()
         stuff_answer = get_stuff_answer(vector_index, stuff_chain, question)
+        time_stop = datetime.now()
+        response_time = (time_stop - time_start).total_seconds()
+
+        history = {
+        'question': question,
+        'answer': stuff_answer['output_text'],
+        'timestamp': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
+        'response_time': response_time
+         }
+        
+        db.collection('chatHistory').add(history)
         return jsonify(stuff_answer), 200
+    
     except Exception as e:
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
     
@@ -71,16 +90,22 @@ class PDFUpload(Resource):
             filename = request.form['filename']
             description = request.form['description']
             pdf = request.files['pdf']
-            pdf_size = len(pdf.read())         
-            pdf_path = pdfs.save(pdf)
+
+            # Simpan file ke Firebase Storage
+            bucket = fb_storage.bucket()
+            blob = bucket.blob(f'documents/{filename}.pdf')
+            blob.upload_from_file(pdf)
+            pdf_path = f'https://firebasestorage.googleapis.com/v0/b/chatbot-1000.appspot.com/o/documents%2F{filename}.pdf?alt=media'
+
+            pdf_size = bucket.get_blob(f'documents/{filename}.pdf').size
             timestamp = datetime.now().strftime('%d-%m-%Y')
             
             if pdf_size < 1000:
-                pdf_size = str(pdf_size) + ' B'
+                pdf_size = str(round(pdf_size, 2)) + ' B'
             elif pdf_size < 1000000:
-                pdf_size = str(pdf_size / 1000) + ' KB'
+                pdf_size = str(round(pdf_size / 1000, 2)) + ' KB'
             else:
-                pdf_size = str(pdf_size / 1000000) + ' MB'
+                pdf_size = str(round(pdf_size / 1000000, 2)) + ' MB'
 
             metadata = {
                 'pdf_path': pdf_path,
@@ -90,6 +115,7 @@ class PDFUpload(Resource):
                 'timestamp': timestamp}
             db.collection('metadata').add(metadata)
             return redirect('http://localhost:5173/data-management')
+            # return jsonify(metadata)
         return jsonify({'error': 'No PDF file provided!'})
 
 api.add_resource(PDFUpload, '/api/upload/pdf')

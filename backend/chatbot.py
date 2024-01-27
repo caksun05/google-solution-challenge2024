@@ -5,6 +5,7 @@ from pathlib import Path
 from pprint import pprint
 from dotenv import load_dotenv
 from flask import current_app
+import urllib
 
 from langchain.prompts import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
@@ -13,6 +14,16 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.embeddings import OpenAIEmbeddings
+
+import firebase_admin
+from firebase_admin import credentials, storage
+from firebase_admin import storage as fb_storage
+from datetime import datetime, timedelta
+import io
+from PyPDF2 import PdfReader
+
+# cred = credentials.Certificate('key.json')
+# firebase_admin.initialize_app(cred, {'storageBucket': 'chatbot-1000.appspot.com'})
 
 warnings.filterwarnings("ignore")
 load_dotenv()
@@ -24,18 +35,25 @@ def initialize_chatbot():
         temperature=0,
         streaming=True
     )
-
-    documents = []
-    pdfs_path = os.path.join(current_app.root_path, 'files')
     
-    for file in os.listdir(pdfs_path):
-        pdf_path = os.path.join(pdfs_path, file)
-
-        try:
-            loader = PyPDFLoader(pdf_path)
-            documents.extend(loader.load_and_split())
-        except Exception as e:
-            print(f"Error loading PDF file {pdf_path}: {str(e)}")
+    documents = []
+    bucket = fb_storage.bucket()
+    folder_prefix = "documents/"
+    
+    for file in bucket.list_blobs(prefix=folder_prefix):
+        if file.name.endswith('.pdf'):
+            try:
+                expiration = datetime.now() + timedelta(hours=1)
+                download_url = file.generate_signed_url(expiration=int(expiration.timestamp()))
+                response = urllib.request.urlopen(download_url)
+                pdf_file = io.BytesIO(response.read())
+                pdf_reader = PdfReader(pdf_file)
+                num_pages = len(pdf_reader.pages)
+                for page in range(num_pages):
+                    page_content = pdf_reader.pages[page].extract_text()
+                    documents.append(page_content)
+            except Exception as e:
+                print(f"Error loading PDF file {file.name}: {str(e)}")
 
     if not documents:
         raise ValueError("No valid PDF documents found.")
@@ -71,3 +89,4 @@ def get_stuff_answer(vector_index, stuff_chain, question):
         return stuff_answer
     except Exception as e:
         return f"An error occurred: {str(e)}"
+

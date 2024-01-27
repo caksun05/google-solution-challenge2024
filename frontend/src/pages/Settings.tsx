@@ -25,13 +25,12 @@ const Settings = () => {
       onAuthStateChanged(auth, async (user) => {
         if (user) {
           const uid = user.uid;
-          console.log('UID:', uid)
+          // console.log('UID:', uid)
           const imageRef = ref(storage, `images/user/${uid}/profile.png`);
           getDownloadURL(imageRef)
             .then((url) => {
               const img = document.getElementById('profile-img-set');
               img?.setAttribute('src', url);
-              console.log('Image URL:', img);
             })
             .catch((error) => {
               const imageRef = ref(storage, `images/user/default.png`);
@@ -65,13 +64,21 @@ const Settings = () => {
 
   const handleDeleteImage = () => {
     const imageRef = ref(storage, `images/user/default.png`);
+    let uid: string | undefined;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        uid = user.uid;
+      }
+    });
     getDownloadURL(imageRef)
-      .then((url) => {
-        deleteObject(ref(storage, `images/user/${userData.uid}/profile.png`))
+      .then(() => {
+        if (uid) {
+          deleteObject(ref(storage, `images/user/${uid}/profile.png`));
+        }
       })
       .catch((error) => {
-        console.log(error)
-      })
+        console.log(error);
+      });
   };
 
   const handleOpenModal = () => {
@@ -109,7 +116,6 @@ const Settings = () => {
         // Update user profile data in Firestore
         const usersCollection = collection(db, 'users');
         const userDocRef = doc(usersCollection, user?.uid);
-        console.log(userDocRef)
 
         await setDoc(userDocRef, {
           fullname: newUserData.fullname || userData.fullname,
@@ -137,7 +143,7 @@ const Settings = () => {
             </div>
             <div className="p-7">
               {userData ? (
-                <form action="#" >
+                <form>
 
                   <div className="mb-5.5">
                     <div className="mb-4 flex flex-col items-center gap-3">
@@ -150,12 +156,12 @@ const Settings = () => {
                         </span>
                         <div className="flex items-center justify-center">
                           <span className="flex gap-2.5">
-                            <button onClick={handleDeleteImage} className="text-center text-sm text-danger">
+                            <a href="#" onClick={handleDeleteImage} className="text-center text-sm text-danger">
                               Hapus
-                            </button>
-                            <button onClick={handleOpenModal} className="text-center text-sm text-primary">
+                            </a>
+                            <a href="#" onClick={handleOpenModal} className="text-center text-sm text-primary">
                               Ubah
-                            </button>
+                            </a>
                           </span>
                         </div>
                       </div>
@@ -362,7 +368,7 @@ const Settings = () => {
                       </span>
 
                       <textarea
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleDataChange(e)}
+                        onChange={handleDataChange}
                         className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         name="bio"
                         id="bio"
@@ -376,17 +382,17 @@ const Settings = () => {
                   <div className="flex justify-end gap-4.5">
                     <button
                       className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                      type="submit"
+                      type="reset"
                     >
                       Batal
                     </button>
-                    <button
+                    <a
+                      href='#'
                       className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"
-                      type='submit'
                       onClick={handleUpload}
                     >
                       Simpan
-                    </button>
+                    </a>
                   </div>
                 </form>
               ) : (

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
 import React, {useState} from 'react';
-import { signInWithCdangerential, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import {auth} from '../../components/firebase/Config';
 import { NavLink, useNavigate } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ const SignIn = () => {
         }
     };
 
-    const onLogin = (e) => {
+    const onLogin = (e: any) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
         .then((userCdangerential) => {
@@ -67,7 +67,7 @@ const SignIn = () => {
                                         type="email"
                                         placeholder="Masukkan email"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        requidanger
+                                        required
                                     />
                                 </div>
                             </div>
@@ -82,7 +82,7 @@ const SignIn = () => {
                                         type="password"
                                         placeholder="Masukkan password"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        requidanger
+                                        required
                                     />
                                 </div>
                             </div>

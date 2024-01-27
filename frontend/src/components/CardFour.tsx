@@ -1,21 +1,33 @@
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './firebase/Config';
+import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/Config';
-import { collection, doc, getDocs } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { useState } from "react";
 
 const CardFour = () => {
+  const Navigate = useNavigate()
   const [totalUsers, setTotalUsers] = useState(0);
 
   useEffect(() => {
-    const documentsCollection = collection(db, "users");
-    const docRef = doc(documentsCollection);
-    getDocs(documentsCollection).then((querySnapshot) => {
-      const total = querySnapshot.size;
-      setTotalUsers(total);
-      console.log('Total dokumen dalam koleksi:', totalUsers);
-    }).catch((error) => {
-      console.error('Error mengambil data koleksi:', error);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        const usersCollection = collection(db, "users");
+        getDocs(usersCollection).then((querySnapshot) => {
+          const total = querySnapshot.size;
+          setTotalUsers(total);
+        }).catch((error) => {
+          console.error('Error mengambil data koleksi:', error);
+        });
+      } else {
+        // User is signed out
+        Navigate('/signin')
+        console.log("user is logged out")
+      }
     });
-  })
+  }, [])
 
   return (
     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
