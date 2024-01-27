@@ -1,13 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from './firebase/Config';
 import { getDocs, collection } from "firebase/firestore";
-
 
 const CardOne = () => {
   const Navigate = useNavigate()

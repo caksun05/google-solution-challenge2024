@@ -1,22 +1,21 @@
-import Breadcrumb from '../components/Breadcrumb';
-import userOne from '../images/user/user-01.png';
-import fireToast from '../hooks/fireToast';
-import { Modal } from "../components/ModalSettings";
 import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../components/firebase/Config';
+import { Modal } from "../components/ModalSettings";
 import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { collection, onSnapshot, doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../components/firebase/Config';
-import { getAuth } from "firebase/auth";
-import { storage } from "../components/firebase/Config";
+import { db, storage, auth } from "../components/firebase/Config";
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import fireToast from '../hooks/fireToast';
+import Breadcrumb from '../components/Breadcrumb';
+import Loader from '../common/Loader';
+
 
 const Settings = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [newUserData, setNewUserData] = useState<any>(null);
   const [image, setImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const Navigate = useNavigate()
   const auth = getAuth();
 
@@ -127,6 +126,10 @@ const Settings = () => {
     });
     Navigate('/settings')
   };
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
 
   return (
     <>
@@ -394,11 +397,10 @@ const Settings = () => {
                       Simpan
                     </a>
                   </div>
+                  
                 </form>
               ) : (
-                <div className="flex justify-center items-center">
-                  <div className="w-10 h-10 border-2 border-primary rounded-full animate-spin"></div>
-                </div>
+                <Loader />
               )}
             </div>
           </div>
