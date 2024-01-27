@@ -1,0 +1,20 @@
+CREATE TABLE Message (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  role TEXT NOT NULL,
+  content TEXT NOT NULL
+);
+
+getMessages:
+SELECT * FROM Message;
+
+insertMessage:
+  INSERT INTO Message(role, content)
+  VALUES(?, ?);
+
+ deleteMessage:
+ DELETE FROM Message;
+
+ updateMessage:
+ UPDATE Message
+ SET content = ?
+ WHERE id = id;
