@@ -1,12 +1,10 @@
-import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import { db, storage } from './firebase/Config';
-import Loader from '../common/Loader';
-import { doc, deleteDoc } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, doc, deleteDoc  } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
-import ReactPaginate from 'react-paginate';
+import Loader from '../common/Loader';
 
 // import TableData from '../components/TableData';
 
@@ -75,12 +73,6 @@ const TableManagement = () => {
     }
   };
 
-
-  // const Filter = (event) => {
-  //   setRecords(data.filter)
-  // }
-
-
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % metadatas.length;
@@ -93,28 +85,12 @@ const TableManagement = () => {
         <div className="flex flex-auto mb-9 mt-2 items-center">
           <h3 className="text-2xl font-bold text-black dark:text-white mr-auto">Tabel Data</h3>
 
-          {/* <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label> */}
-          {/* <div className=" mr-5">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg className="w-4 h-4 text-greendark0 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-              </svg>
-            </div>
-            <input
-              type="search"
-              id="default-search"
-              className="block w-full p-3.5 ps-10 text-sm text-gray-900 border border-green rounded-full bg-greendark focus:ring-green focus:border-green dark:bg-meta-4 dark:border-gray dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
-              placeholder="Search"
-              
-            />
-            <button type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-green hover:bg-green focus:ring-4 focus:outline-none focus:ring-green font-medium rounded-lg text-sm px-4 py-2 dark:bg-green dark:hover:bg-green dark:focus:ring-green">Search</button>
-          </div> */}
-
           <NavLink to="/data-management/create"
             className={`group max-h-12 rounded-full flex items-center gap-2.5 py-2 px-6 font-medium text-white duration-300 ease-in-out bg-green hover:bg-greendark dark:hover:bg-greendark`}>
             + Tambah
           </NavLink>
         </div>
+        
         {/* To add table height */}
         <div className="max-w-full overflow-x-auto">
           {loading ? (
