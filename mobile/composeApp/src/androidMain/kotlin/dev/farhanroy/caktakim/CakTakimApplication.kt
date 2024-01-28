@@ -1,4 +1,4 @@
-package dev.farhanroy.utter
+package dev.farhanroy.caktakim
 
 import android.app.Application
 import di.AppModule
@@ -7,7 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 
-class UtterApplication : Application() {
+class CakTakimApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -17,7 +17,7 @@ class UtterApplication : Application() {
     private fun initKoin() {
         stopKoin()
         startKoin {
-            androidContext(this@UtterApplication)
+            androidContext(this@CakTakimApplication)
             modules(platformModule(),  AppModule.appModule)
         }
     }

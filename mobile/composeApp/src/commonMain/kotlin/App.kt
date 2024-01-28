@@ -6,14 +6,14 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import org.koin.compose.KoinContext
 import screens.home.HomeScreen
 import screens.splash.SplashScreen
-import ui.UtterTheme
+import ui.CakTakimTheme
 
 @Composable
 fun App() {
     PreComposeApp {
         KoinContext {
             val navigator = rememberNavigator()
-            UtterTheme {
+            CakTakimTheme {
                 NavigationHost(navigator)
             }
         }

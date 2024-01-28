@@ -4,8 +4,16 @@ import database.LocalDatabase
 import database.Message
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.FormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.Parameters
+import io.ktor.http.contentType
+import kotlinx.datetime.Clock
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
@@ -16,9 +24,10 @@ class MessageRepository (
     private val client: HttpClient,
     private val database: LocalDatabase
 ) {
+    private val baseUrl: String = "https://infinite-mutually-foal.ngrok-free.app"
     suspend fun askQuestion(question: String): BaseModel<String> {
         return try {
-            val response: HttpResponse = client.get("https://e7cb-54-179-21-148.ngrok-free.app/") {
+            val response: HttpResponse = client.get("${baseUrl}/chatbot") {
                 url {
                     parameters.append("question", question)
                 }
@@ -52,5 +61,17 @@ class MessageRepository (
 
     fun deleteMessage() {
         database.deleteMessage()
+    }
+
+    suspend fun report(email: String, question: String) {
+        val parameters = Parameters.build {
+            append("email", email)
+            append("question", question)
+            append("timestamp", Clock.System.now().toString())
+        }
+        val response: HttpResponse = client.post("${baseUrl}/report") {
+            contentType(ContentType.Application.FormUrlEncoded)
+            setBody(FormDataContent(parameters))
+        }
     }
 }

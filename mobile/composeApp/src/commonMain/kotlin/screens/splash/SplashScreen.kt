@@ -42,7 +42,7 @@ fun SplashScreen(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp),
                 contentDescription = null
             )
-            Text("Utter", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 21.sp))
+            Text("Cak Takim", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 21.sp))
         }
     }
 }

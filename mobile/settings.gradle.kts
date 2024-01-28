@@ -1,4 +1,4 @@
-rootProject.name = "Utter"
+rootProject.name = "caktakim"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

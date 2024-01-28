@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -40,6 +41,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
             implementation("app.cash.sqldelight:android-driver:2.0.0")
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:30.0.1"))
         }
         val commonMain by getting {
             dependencies {
@@ -57,10 +59,10 @@ kotlin {
                 api(libs.precompose.koin)
                 api(libs.precompose.viewmodel)
 
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-
-
             }
         }
 
@@ -95,7 +97,7 @@ kotlin {
 }
 
 android {
-    namespace = "dev.farhanroy.utter"
+    namespace = "dev.farhanroy.caktakim"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -103,7 +105,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "dev.farhanroy.utter"
+        applicationId = "dev.farhanroy.caktakim"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -136,7 +138,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "dev.farhanroy.utter"
+            packageName = "dev.farhanroy.caktakim"
             packageVersion = "1.0.0"
         }
     }

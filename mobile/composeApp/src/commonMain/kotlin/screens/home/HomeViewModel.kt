@@ -24,6 +24,9 @@ class HomeViewModel: ViewModel(), KoinComponent {
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
+    private val _isNotAnswering: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isNotAnswering = _isNotAnswering.asStateFlow()
+
     init {
         getAllMessage()
     }
@@ -38,46 +41,83 @@ class HomeViewModel: ViewModel(), KoinComponent {
     }
 
     fun askQuestion(question: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.addMessage(
-                    Message(
-                        id = 0,
-                        role = "user",
-                        content = question
+        if (_isNotAnswering.value) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    repository.report(question, _messages.value[_messages.value.size-2].content)
+                    repository.addMessage(
+                        Message(
+                            id = 0,
+                            role = "user",
+                            content = question
+                        )
                     )
-                )
+                    repository.addMessage(
+                        Message(
+                            id = 0,
+                            role = "assistant",
+                            content = "Terima kasih 🙏🏻telah menghubungi kami, Cak Takim Crew akan segera membalas pertanyaan anda"
+                        )
+                    )
+                    getAllMessage()
+
+                }
+                _isNotAnswering.emit(false)
+            }
+        } else {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    repository.addMessage(
+                        Message(
+                            id = 0,
+                            role = "user",
+                            content = question
+                        )
+                    )
+                    getAllMessage()
+                }
+                _loading.update { true }
+                repository.askQuestion(
+                    question = question
+                ).also { baseModel ->
+                    _loading.update { false }
+                    when (baseModel) {
+                        is BaseModel.Success -> {
+                            withContext(Dispatchers.IO) {
+                                if (baseModel.data == "answer not available in context") {
+                                    repository.addMessage(
+                                        Message(
+                                            id = 0,
+                                            role = "assistant",
+                                            content = "Mohon maaf kami tidak dapat menjawab, berikan email anda nanti Cak Takim bantu jawab!"
+                                        )
+                                    )
+                                    _isNotAnswering.emit(true)
+                                } else {
+                                    repository.addMessage(
+                                        Message(
+                                            id = 0,
+                                            role = "assistant",
+                                            content = baseModel.data
+                                        )
+                                    )
+                                }
+
+
+                            }
+                        }
+
+                        is  BaseModel.Error -> {
+                            println("Something wrong : ${baseModel.error}")
+                        }
+
+                        else -> {}
+                    }
+                }
                 getAllMessage()
             }
-            _loading.update { true }
-            repository.askQuestion(
-                question = question
-            ).also { baseModel ->
-                _loading.update { false }
-                when (baseModel) {
-                    is BaseModel.Success -> {
-
-                        withContext(Dispatchers.IO) {
-                                    repository.addMessage(
-                                    Message(
-                                        id = 0,
-                                        role = "assistant",
-                                        content = baseModel.data
-                                    )
-                                    )
-
-                        }
-                    }
-
-                    is  BaseModel.Error -> {
-                        println("Something wrong : ${baseModel.error}")
-                    }
-
-                    else -> {}
-                }
-            }
-            getAllMessage()
         }
+
     }
 
     fun deleteMessage() {

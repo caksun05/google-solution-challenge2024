@@ -1,8 +1,0 @@
-langchain
-flask
-pandas
-pypdf
-openai
-chromadb
-tiktoken
-python-dotenv
