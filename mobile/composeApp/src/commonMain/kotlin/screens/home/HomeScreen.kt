@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 import components.LoadingAnimation
 import components.MessengerItemCard
 import components.ReceiverMessageItemCard
-import components.ToolbarMessageUtter
+import components.ToolbarMessageCakTakim
+import components.ToolbarMessageCakTakim
 import components.WriteMessageCard
 import moe.tlaster.precompose.koin.koinViewModel
 
@@ -35,7 +36,7 @@ fun HomeScreen(
     Scaffold(
         backgroundColor = Color.White,
         topBar = {
-            ToolbarMessageUtter(
+            ToolbarMessageCakTakim (
                 onReset = {viewModel.deleteMessage()}
             )
         },

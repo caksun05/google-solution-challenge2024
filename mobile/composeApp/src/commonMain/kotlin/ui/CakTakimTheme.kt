@@ -9,13 +9,13 @@ val BluePrimary = Color(0xFF3369FF)
 val GrayColor = Color(0xFFEEEEEE)
 val GreenColor = Color(0xFF349956)
 
-val utterColors = lightColors(
+val cakTakimColors = lightColors(
     primary = GreenColor
 )
 
 @Composable
-fun UtterTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colors = utterColors) {
+fun CakTakimTheme(content: @Composable () -> Unit) {
+    MaterialTheme(colors = cakTakimColors) {
         content()
     }
 }

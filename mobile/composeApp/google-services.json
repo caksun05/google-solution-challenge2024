@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "916926694978",
+    "firebase_url": "https://chatbot-1000-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "chatbot-1000",
+    "storage_bucket": "chatbot-1000.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916926694978:android:74f5d9ffdb542d19de0fdb",
+        "android_client_info": {
+          "package_name": "dev.farhanroy.caktakim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916926694978-eh1c9eefdqiafu5h8462k5cotc7hdsn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6Nq3TTyGRBoaGn4IFVCE2tV9DKFrQbiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916926694978-eh1c9eefdqiafu5h8462k5cotc7hdsn7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
