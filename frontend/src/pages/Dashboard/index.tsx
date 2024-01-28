@@ -1,5 +1,6 @@
 import CardFour from '../../components/CardFour.tsx';
 import CardOne from '../../components/CardOne.tsx';
+import CardTwo from '../../components/CardTwo.tsx';
 import CardThree from '../../components/CardThree.tsx';
 import ChartTwo from '../../components/ChartTwo.tsx';
 import { useEffect } from 'react';
@@ -14,8 +15,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardOne />
+        <CardTwo />
         <CardThree />
         <CardFour />
       </div>
