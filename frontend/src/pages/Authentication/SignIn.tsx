@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo-no-bg.png';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import {auth} from '../../components/firebase/Config';
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 
 const SignIn = () => {
@@ -63,7 +63,7 @@ const SignIn = () => {
                                 <div className="relative">
                                     <input
                                         onChange={(e) => setEmail(e.target.value)}
-                                        value={email}                                        
+                                        value={email}
                                         type="email"
                                         placeholder="Masukkan email"
                                         className="w-full rounded-full border border-stroke bg-transparent py-3 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -116,11 +116,12 @@ const SignIn = () => {
                             </div>}
 
 
-                            <div className="mb-4">                                
+                            <div className="mb-4">
                                 <button onClick={onLogin} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign In
                                 </button>
-                            </div>                        
+                            </div>
+
                             <button onClick={handleGoogleSignIn} className="flex w-full items-center justify-center gap-3.5 rounded-full border border-stroke bg-gray p-3 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                 <span>
                                     <svg

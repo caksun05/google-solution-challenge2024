@@ -97,7 +97,7 @@ const SignUp = () => {
                                 </div>
                             </div>
                             
-                            <div className="mb-4">            
+                            <div className="mb-4">
                                 <button onClick={onSubmit} type="submit" className="flex w-full items-center justify-center gap-3.5 rounded-full border text-white border-stroke bg-green p-3 hover:bg-greendark dark:border-strokedark dark:bg-green dark:hover:bg-greendark">
                                     Sign Up
                                 </button>

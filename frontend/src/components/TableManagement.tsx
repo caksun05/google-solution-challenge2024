@@ -1,20 +1,25 @@
-import { NavLink, useHref } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { collection, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
+import { NavLink } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
 import { db, storage } from './firebase/Config';
+import { collection, query, orderBy, getDocs, doc, deleteDoc  } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 import Loader from '../common/Loader';
-import { doc, deleteDoc } from "firebase/firestore";
-import { ref, deleteObject, getDownloadURL } from "firebase/storage";
 
 // import TableData from '../components/TableData';
 
 const TableManagement = () => {
-  const [metadatas, setMetadatas] = useState<{ id: string }[]>([]);
-  // const [search, setSearch] = useState("");
+  const [metadatas, setMetadatas] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [itemOffset, setItemOffset] = useState(0);
+
+  const itemsPerPage = 5;
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = metadatas.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(metadatas.length / itemsPerPage);
+  let currentPage = itemOffset / itemsPerPage;
 
   useEffect(() => {
-    // ambil seluruh data dengan pengurutan berdasarkan timestamp
     const collectionRef = collection(db, "metadata");
     const q = query(collectionRef, orderBy("timestamp", "desc"));
 
@@ -68,39 +73,27 @@ const TableManagement = () => {
       console.error("Failed to open a new window.");
     }
   };
-  
 
-  // const Filter = (event) => {
-  //   setRecords(data.filter)
-  // }
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % metadatas.length;
+    setItemOffset(newOffset);
+    currentPage = event.selected;
+  };
 
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className=" rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <form>
         <div className="flex flex-auto mb-9 mt-2 items-center">
           <h3 className="text-2xl font-bold text-black dark:text-white mr-auto">Tabel Data</h3>
-          {/* <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label> */}
-          {/* <div className=" mr-5">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-              </svg>
-            </div>
-            <input
-              type="search"
-              id="default-search"
-              className="block w-full p-3.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-green focus:border-green dark:bg-meta-4 dark:border-gray dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
-              placeholder="Search"
-              
-            />
-            <button type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-green hover:bg-green focus:ring-4 focus:outline-none focus:ring-green font-medium rounded-lg text-sm px-4 py-2 dark:bg-green dark:hover:bg-green dark:focus:ring-green">Search</button>
-          </div> */}
 
           <NavLink to="/data-management/create"
             className={`group max-h-12 rounded-full flex items-center gap-2.5 py-2 px-6 font-medium text-white duration-300 ease-in-out bg-green hover:bg-greendark dark:hover:bg-greendark`}>
             + Tambah
           </NavLink>
         </div>
+        
+        {/* To add table height */}
         <div className="max-w-full overflow-x-auto">
           {loading ? (
             <Loader />
@@ -141,31 +134,31 @@ const TableManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {metadatas.map((metadata, id) => (
+                {currentItems.map((items: any, id: any) => (
                   <tr key={id}>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {id + 1}
+                        {currentPage * itemsPerPage + id + 1} 
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {metadata.filename}
+                        {items.filename}
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {metadata.description}
+                        {items.description}
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {metadata.timestamp}
+                        {items.timestamp}
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {metadata.pdf_size}
+                        {items.pdf_size}
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
@@ -239,12 +232,26 @@ const TableManagement = () => {
                         </button>
                       </div>
                     </td>
-                  </tr>                  
+                  </tr>
                 ))}
               </tbody>
             </table>
           )}
         </div>
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            containerClassName="inline-flex -space-x-px text-base h-10 my-5"
+            pageLinkClassName="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 border border-e-0 border-greendark hover:bg-green hover:text-white dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-green dark:hover:text-white"
+            previousLinkClassName="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 border border-e-0 border-greendark rounded-s-lg hover:bg-green hover:text-white dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-green dark:hover:text-white"
+            nextLinkClassName="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-greendark rounded-e-lg hover:bg-green hover:text-white dark:border-bodydark2 dark:text-gray-400 dark:hover:bg-green dark:hover:text-white"
+            activeClassName="text-white border-green bg-green dark:bg-green dark:text-white"
+          />
       </form>
     </div>
   );
