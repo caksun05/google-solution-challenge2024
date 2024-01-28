@@ -20,36 +20,8 @@ firebase_admin.initialize_app(cred, {'storageBucket': 'chatbot-1000.appspot.com'
 app = Flask(__name__)
 db = firestore.Client()
 
-# Routes
-@app.route('/users', methods=['GET'])
-def users():
-    data = []
-    docs = db.collection('users').stream()
-    for doc in docs:
-        data.append(doc.to_dict())
-    return jsonify(data)
-
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.form['username']
-    password = request.form['password']
-    if username is None or password is None:
-        return jsonify({'error': 'Please provide both username and password'}), 400
-
-    docs = db.collection('users').where('username', '==', username).stream()
-    for doc in docs:
-        user = doc.to_dict()
-        if user['password'] == password:
-            return jsonify({'message': 'User logged in successfully!'})
-        else:
-            return jsonify({'error': 'Invalid credentials!'}), 400
-
-    return jsonify({'error': 'User does not exist!'}), 400
-
-@app.route('/logout', methods=['POST'])
-def logout():
-    return jsonify({'message': 'User logged out successfully!'})
-
+# Routes    
+vector_index, stuff_chain = initialize_chatbot()
 @app.route('/chatbot', methods=['GET'])
 def chatbot():
     time_start = datetime.now()
@@ -59,7 +31,6 @@ def chatbot():
         return jsonify({'error': 'Please provide a valid \'question\' parameter in the request.'}), 400
 
     try:
-        vector_index, stuff_chain = initialize_chatbot()
         stuff_answer = get_stuff_answer(vector_index, stuff_chain, question)
         time_stop = datetime.now()
         response_time = (time_stop - time_start).total_seconds()
@@ -70,13 +41,26 @@ def chatbot():
         'timestamp': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
         'response_time': response_time
          }
-        
+
         db.collection('chatHistory').add(history)
         return jsonify(stuff_answer), 200
     
     except Exception as e:
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
-    
+
+@app.route('/report', methods=['POST'])
+def report():
+    email = request.form['email']
+    question = request.form['question']
+    timestamp = request.form['timestamp']
+    report = {
+        'email': email,
+        'question': question,
+        'timestamp': timestamp
+    }   
+    db.collection('report').add(report)
+    return jsonify(report), 200
+
 # File Uploads API
 app.config['UPLOADED_PDFS_DEST'] = 'files'
 pdfs = UploadSet('pdfs', ('pdf',))
