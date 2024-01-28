@@ -17,6 +17,7 @@ const TableManagement = () => {
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = metadatas.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(metadatas.length / itemsPerPage);
+  let currentPage = itemOffset / itemsPerPage;
 
   useEffect(() => {
     const collectionRef = collection(db, "metadata");
@@ -77,6 +78,7 @@ const TableManagement = () => {
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % metadatas.length;
     setItemOffset(newOffset);
+    currentPage = event.selected;
   };
 
   return (
@@ -136,7 +138,7 @@ const TableManagement = () => {
                   <tr key={id}>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
                       <p className="text-black dark:text-white">
-                        {id + 1}
+                        {currentPage * itemsPerPage + id + 1} 
                       </p>
                     </td>
                     <td className="border-b justify-center items-center border-[#eee] py-5 px-4 dark:border-strokedark xl:px-8 xl:py-6">
