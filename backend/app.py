@@ -11,7 +11,6 @@ from datetime import datetime
 from chatbot import get_stuff_answer, initialize_chatbot
 import os
 from datetime import datetime
-import message
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
 cred = credentials.Certificate('key.json')
@@ -61,18 +60,6 @@ def report():
     }   
     db.collection('report').add(report)
     return jsonify(report), 200
-
-@app.route('/send-email', methods=['POST'])
-def send_email():
-    auth = {
-        'email': os.getenv('EMAIL'),
-        'password': os.getenv('PASSWORD')
-    }
-    question = request.form['question']
-    answer = request.form['answer']
-    sender = request.form['sender']
-    receiver = request.form['receiver']
-    message.send_email(auth, sender, receiver, question, answer)
 
 # File Uploads API
 app.config['UPLOADED_PDFS_DEST'] = 'files'

@@ -23,7 +23,7 @@ const FormResponse = () => {
             }
         });
     }, [])
-    
+
     return (
         <>
             <div className="mx-auto max-w-270">
@@ -71,7 +71,10 @@ const FormResponse = () => {
                                     <NavLink to="/data-response" className="flex w-1/2 justify-center rounded text-danger border hover:text-white hover:bg-danger focus:outline-none dark:focus:outline-none dark:hover:bg-danger p-3 font-medium">
                                         Cancel
                                     </NavLink>
-                                    <button type="submit" className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray">
+                                    <button 
+                                    onClick={() => Navigate('http://localhost:5000/data-response')}
+                                    type="submit" 
+                                    className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray">
                                         Kirim
                                     </button>
                                 </div>

@@ -19,7 +19,7 @@ const AnswerTable = () => {
     const pageCount = Math.ceil(chatHistory.length / itemsPerPage);
 
     useEffect(() => {
-        const collectionRef = collection(db, "chatHistory");
+        const collectionRef = collection(db, "report");
         const q = query(collectionRef, orderBy("timestamp", "desc"));
     
         getDocs(q)
@@ -43,7 +43,7 @@ const AnswerTable = () => {
     }, []);
 
     // Invoke when user click to request another page.
-    const handlePageClick = (event) => {
+    const handlePageClick = (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % chatHistory.length;
         setItemOffset(newOffset);
     };
