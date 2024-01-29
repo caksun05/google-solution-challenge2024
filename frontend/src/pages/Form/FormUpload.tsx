@@ -53,7 +53,7 @@ const FormUpload = () => {
                 <Breadcrumb pageName="Manajemen Data" />
 
                 <div className="flex justify-center items-center">
-                    <div className="justify-self-center justify-center justify-items-center content-center items-center self-center rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                    <div className="w-1/2 2xsm:w-3/4 justify-self-center justify-center justify-items-center content-center items-center self-center rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                         <h3 className="font-medium text-black dark:text-white">
                             Form Upload File
@@ -103,10 +103,10 @@ const FormUpload = () => {
                                 </div>
 
                                 <div className="flex gap-4">
-                                    <NavLink to="/data-management" className="flex w-1/2 justify-center rounded text-danger border hover:text-white hover:bg-danger focus:outline-none dark:focus:outline-none dark:hover:bg-danger p-3 font-medium">
+                                    <NavLink to="/data-management" className="flex w-1/2 justify-center rounded text-danger border transition hover:text-white hover:bg-danger focus:outline-none dark:focus:outline-none dark:hover:bg-danger p-3 font-medium">
                                         Cancel
                                     </NavLink>
-                                    <button type="submit" className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray">
+                                    <button type="submit" className="flex w-1/2 justify-center rounded bg-green p-3 font-medium text-white transition hover:bg-greendark">
                                         Upload
                                     </button>
                                 </div>
