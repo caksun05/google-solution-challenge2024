@@ -65,7 +65,7 @@ const FormResponse = () => {
     const Navigate = useNavigate()
 
     // Send to Email
-    const sendEmail = (e) => {
+    const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         emailjs.sendForm('service_zak6dce', 'template_sjf0mcg', myRef.current, 'DEs8oUW5ApBeW2pqU')
@@ -74,11 +74,7 @@ const FormResponse = () => {
         }, (error) => {
             console.log(error.text);
         });
-<<<<<<< HEAD
-    }, [])
-=======
     };
->>>>>>> 88097f22a03c2122ce60bb54ffaa46e917fe2490
 
     return (
         <>
@@ -180,14 +176,7 @@ const FormResponse = () => {
                                     <NavLink to="/data-response" className="flex w-1/2 justify-center rounded text-danger border transition hover:text-white hover:bg-danger focus:outline-none dark:focus:outline-none dark:hover:bg-danger p-3 font-medium">
                                         Cancel
                                     </NavLink>
-<<<<<<< HEAD
-                                    <button 
-                                    onClick={() => Navigate('http://localhost:5000/data-response')}
-                                    type="submit" 
-                                    className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray">
-=======
                                     <button type="submit" className="flex w-1/2 justify-center rounded bg-green p-3 font-medium text-white transition hover:bg-greendark">
->>>>>>> 88097f22a03c2122ce60bb54ffaa46e917fe2490
                                         Kirim
                                     </button>
                                 </div>

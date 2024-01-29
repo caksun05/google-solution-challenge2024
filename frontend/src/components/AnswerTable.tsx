@@ -43,13 +43,8 @@ const AnswerTable = () => {
     }, []);
 
     // Invoke when user click to request another page.
-<<<<<<< HEAD
-    const handlePageClick = (event: any) => {
-        const newOffset = (event.selected * itemsPerPage) % chatHistory.length;
-=======
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % report.length;
->>>>>>> 88097f22a03c2122ce60bb54ffaa46e917fe2490
         setItemOffset(newOffset);
     };
 
