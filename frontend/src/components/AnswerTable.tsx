@@ -8,23 +8,23 @@ import Loader from '../common/Loader';
 import Modal from './ModalResponse';
 
 const AnswerTable = () => {
-    const [chatHistory, setChatHistory] = useState<any>([]);
+    const [report, setReport] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [itemOffset, setItemOffset] = useState(0);
     const [open, setOpen] = useState(false);
 
     const itemsPerPage = 5;
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = chatHistory.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(chatHistory.length / itemsPerPage);
+    const currentItems = report.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(report.length / itemsPerPage);
 
     useEffect(() => {
-        const collectionRef = collection(db, "chatHistory");
+        const collectionRef = collection(db, "report");
         const q = query(collectionRef, orderBy("timestamp", "desc"));
     
         getDocs(q)
             .then((querySnapshot) => {
-                setChatHistory(
+                setReport(
                 querySnapshot.docs.map((doc) => ({
                     ...doc.data(),
                     id: doc.id,
@@ -44,7 +44,7 @@ const AnswerTable = () => {
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % chatHistory.length;
+        const newOffset = (event.selected * itemsPerPage) % report.length;
         setItemOffset(newOffset);
     };
 
@@ -78,14 +78,9 @@ const AnswerTable = () => {
                             Pertanyaan
                         </h5>
                         </th>
-                        <th className="min-w-[100px] py-4 px-4 xl:px-8 xl:py-6">
+                        <th className="min-w-[80px] py-4 px-4 xl:px-8 xl:py-6">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
                             Tanggal
-                        </h5>
-                        </th>
-                        <th className="min-w-[100px] py-4 px-4 xl:px-8 xl:py-6">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Status
                         </h5>
                         </th>
                         <th className="py-4 px-4 xl:px-8 xl:py-6">
@@ -105,7 +100,7 @@ const AnswerTable = () => {
                         </td>
                         <td className="border-b justify-center items-center border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:px-8 xl:py-6">
                             <p className="text-black dark:text-white">
-                            {/* {items.filename} */}
+                            {items.email}
                             </p>
                         </td>
                         <td className="border-b justify-center items-center border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:px-8 xl:py-6">
@@ -116,11 +111,6 @@ const AnswerTable = () => {
                         <td className="border-b justify-center items-center border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:px-8 xl:py-6">
                             <p className="text-black dark:text-white">
                             {items.timestamp}
-                            </p>
-                        </td>
-                        <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark">
-                            <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                            Sukses
                             </p>
                         </td>
                         <td className="border-b justify-center items-center border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:px-8 xl:py-6">
