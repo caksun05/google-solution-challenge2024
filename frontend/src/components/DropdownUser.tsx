@@ -11,11 +11,16 @@ import { onAuthStateChanged } from "firebase/auth";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 2000);
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -103,16 +108,23 @@ const DropdownUser = () => {
         className="flex items-center gap-4"
         to="#"
       >
-        <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            {userData?.fullname || 'User'}
+        {loading ? (
+          <div className="flex w-20 h-12 items-center justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"></div>
+          </div>
+        ) : (
+          <>
+          <span className="hidden text-right lg:block">
+            <span className="block text-sm font-medium text-black dark:text-white">
+              {userData?.fullname || 'User'}
+            </span>
           </span>
-        </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <img id="profile-img" alt="User" />
-        </span>
-
+          <span className="h-12 w-12 items-center justify-center rounded-full">
+            <img id="profile-img" alt="Profile" />
+          </span>
+          </>
+        )}
         <svg
           className={`hidden fill-current sm:block ${dropdownOpen ? 'rotate-180' : ''
             }`}
