@@ -128,7 +128,7 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => setLoading(false), 2000);
   }, []);
 
   return (
@@ -400,7 +400,9 @@ const Settings = () => {
                   
                 </form>
               ) : (
-                <Loader />
+                <div className="flex w-115 h-125 items-center justify-center bg-white dark:bg-boxdark">
+                  <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"></div>
+                </div>
               )}
             </div>
           </div>

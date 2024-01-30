@@ -56,7 +56,7 @@ const AnswerTable = () => {
             </div>
             
             {/* To add table height */}
-            <div className="max-w-full overflow-x-auto">
+            <div className="max-w-full overflow-x-auto pb-5">
                 {loading ? (
                 <Loader />
                 ) : (
